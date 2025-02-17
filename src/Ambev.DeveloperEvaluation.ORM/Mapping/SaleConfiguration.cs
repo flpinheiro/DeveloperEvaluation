@@ -15,8 +15,8 @@ public class SaleConfiguration : IEntityTypeConfiguration<Sale>
         builder.Property(p => p.Id).HasColumnType("uuid").HasDefaultValueSql("gen_random_uuid()");
 
         builder.Property(s => s.Number).UseSerialColumn().IsRequired();
-        builder.Property(s => s.TotalValue).IsRequired();
-        builder.Property(s => s.Date).IsRequired();
+        builder.Property(s => s.TotalValue).IsRequired().HasPrecision(18, 2);
+        builder.Property(s => s.CreatedAt).IsRequired();
         builder.Property(s => s.UpdatedAt).IsRequired(false);
         builder.Property(p => p.Status).IsRequired().HasDefaultValue(SaleStatus.Active);
 

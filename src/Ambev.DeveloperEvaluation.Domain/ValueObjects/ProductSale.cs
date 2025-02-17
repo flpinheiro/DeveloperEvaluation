@@ -43,7 +43,7 @@ public class ProductSale
     /// </summary>
     public SaleStatus Status { get; set; } = SaleStatus.Active;
 
-    public DateTime Date { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public DateTime? UpdatedAt { get; set; }
 

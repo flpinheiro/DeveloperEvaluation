@@ -16,7 +16,7 @@ public class Sale : BaseEntity
     /// Gets the date and time when the sale was made.
     /// use the time zone utc to save the date
     /// </summary>
-    public DateTime Date { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public DateTime? UpdatedAt { get; set; } = null;
 

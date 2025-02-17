@@ -25,11 +25,11 @@ public class ProductSaleConfiguration : IEntityTypeConfiguration<ProductSale>
             .HasPrincipalKey(p => p.Id);
 
         builder.Property(p => p.Quantity).IsRequired();
-        builder.Property(p => p.TotalAmout).IsRequired();
-        builder.Property(p => p.Discount).IsRequired();
+        builder.Property(p => p.TotalAmout).IsRequired().HasPrecision(18, 2);
+        builder.Property(p => p.Discount).IsRequired().HasPrecision(18, 2);
         builder.Property(p => p.Status).IsRequired();
 
-        builder.Property(p => p.Date).IsRequired();
+        builder.Property(p => p.CreatedAt).IsRequired();
         builder.Property(p => p.UpdatedAt).IsRequired(false);
     }
 }
