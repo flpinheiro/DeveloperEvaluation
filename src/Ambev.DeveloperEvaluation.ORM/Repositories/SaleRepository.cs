@@ -41,6 +41,7 @@ public class SaleRepository : ISaleRepository
     public async Task<PaginatedList<Sale>> GetAsync(GetPaginatedSaleDto request, CancellationToken cancellationToken = default)
     {
         return await _context.Sales
+            .Where(s => s.UserId == request.UserId)
             .ToPaginatedListAsync(request.PageNumber, request.PageSize);
     }
 
