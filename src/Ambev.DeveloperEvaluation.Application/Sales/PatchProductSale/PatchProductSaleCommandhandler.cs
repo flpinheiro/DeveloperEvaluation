@@ -1,4 +1,5 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Repositories;
+﻿using Ambev.DeveloperEvaluation.Domain.Enums;
+using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Ambev.DeveloperEvaluation.Domain.ValueObjects;
 using MediatR;
 
@@ -36,7 +37,9 @@ public class PatchProductSaleCommandhandler : IRequestHandler<PatchProductSaleCo
                     Product = product,
                     Quantity = quantity,
                     SaleId = sale.Id,
-                    Sale = sale
+                    Sale = sale,
+                    Status = SaleStatus.Active
+
                 };
                 sale.ProductSales.Add(newProductSale);
             }
@@ -46,7 +49,7 @@ public class PatchProductSaleCommandhandler : IRequestHandler<PatchProductSaleCo
                 if (oldProductSale != null)
                 {
                     oldProductSale.Quantity = quantity;
-                    oldProductSale.Status = Domain.Enums.SaleStatus.Active;
+                    oldProductSale.Status = SaleStatus.Active;
                 }
             }
         }

@@ -1,6 +1,225 @@
-@Ambev.DeveloperEvaluation.WebApi_HostAddress = http://localhost:5119
+﻿# host address of the server to be executed
+@host_Address = https://localhost:8081
 
-GET {{Ambev.DeveloperEvaluation.WebApi_HostAddress}}/weatherforecast/
-Accept: application/json
+#jwt token of the user, obtain after the fiurst login
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI5MDE2ZjZkMS1jZTA3LTQ1ZGEtOWFlMC0yNjI3M2FjM2E2NDciLCJ1bmlxdWVfbmFtZSI6ImN1c3RvbWVyIiwicm9sZSI6IkN1c3RvbWVyIiwibmJmIjoxNzM5ODMxMjY4LCJleHAiOjE3Mzk4NjAwNjgsImlhdCI6MTczOTgzMTI2OH0.JV7raWEuT8LGdvciqxxYt8OAIBVd5XxUJML93KqHsjo
+
+#saleId obtain after create the first sale id
+@saleid = 16b3123c-44aa-4fe4-bdbf-4f57801dff65
+
+@productId = f5b1b3b4-3b3b-4b3b-8b3b-3b3b3b3b3b3b
+
+#### Get all products
+
+GEt {{host_Address}}/api/product
+Content-Type: application/json
+
+### Get Product By Id, Change the ProductId to get diferents products
+
+GET {{host_Address}}/api/product/{{productId}}
+Content-Type:  application/json
+
+### Create anew Product
+
+POST {{host_Address}}/api/product
+Content-Type: application/json
+
+{
+  "name": "Test Product",
+  "description": "A product made only to test",
+  "price": 10,
+  "quantity": 100
+}
+
+#### Create customer user 
+
+POST {{host_Address}}/api/users
+Content-Type: application/json
+
+{
+  "username": "customer",
+  "password": "Password@12345",
+  "phone": "11999999999",
+  "email": "customer@test.com",
+  "status": 1,
+  "role": 1
+}
+
+### Create Manger user 
+
+POST {{host_Address}}/api/users
+Content-Type: application/json
+
+{
+  "username": "manager",
+  "password": "Password@12345",
+  "phone": "12999999999",
+  "email": "manager@test.com",
+  "status": 1,
+  "role": 2
+}
+
+### create admin user 
+
+
+POST {{host_Address}}/api/users
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "Password@12345",
+  "phone": "13999999999",
+  "email": "admin@test.com",
+  "status": 1,
+  "role": 3
+}
+
+
+### Authenticate user customer 
+
+POST {{host_Address}}/api/auth
+Content-Type: application/json
+
+{
+  "password": "Password@12345",
+  "email": "customer@test.com"
+}
+
+### authticate user manager 
+
+POST {{host_Address}}/api/auth
+Content-Type: application/json
+{
+  "password": "Password@12345",
+  "email": "manager@test.com"
+}
+
+### authenticate user admin 
+
+POST {{host_Address}}/api/auth
+Content-Type: application/json
+{
+  "password": "Password@12345",
+  "email": "admin@test.com"
+}
+
+### for the sale it's mandatory to have Authorization: Bearer {{token}} header parameter, thus authenticate and change the token on the right place
+
+### get all sales for customer, if empty create a few sales before
+
+GET {{host_Address}}/api/sale
+Authorization: Bearer {{token}}
+
+### create sale for customer, but should return error of maximun quantity exceded
+
+POST {{host_Address}}/api/sale
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "products": [
+    {
+      "productId": "6f5a5196-af78-4446-940e-6c410238399d",
+      "quantity": 10
+    },
+    {
+      "productId": "6f5a5196-af78-4446-940e-6c410238399d",
+      "quantity": 10
+    },
+    {
+      "productId": "6f5a5196-af78-4446-940e-6c410238399d",
+      "quantity": 10
+    },
+    {
+      "productId": "6f5a5196-af78-4446-940e-6c410238399d",
+      "quantity": 10
+    }
+  ]
+}
+
+
+### create sale for customer, you can change the products id and quantity, also add more products to the selection
+
+POST {{host_Address}}/api/sale
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "products": [
+    {
+      "productId": "6f5a5196-af78-4446-940e-6c410238399d",
+      "quantity": 1
+    },
+    {
+      "productId": "8295a692-df5c-4d85-8ac9-e50dd5829f0c",
+      "quantity": 4
+    },
+    {
+      "productId": "c28ab6d3-2cd3-45b3-98a7-2222c9cd7edb",
+      "quantity": 10
+    },
+    {
+      "productId": "e3c9c4bd-b12c-45b0-a106-7390a8249a7a",
+      "quantity": 20
+    }
+  ]
+}
+
+### Get sale by id
+
+
+GET {{host_Address}}/api/sale/{{saleid}}
+Authorization: Bearer {{token}}
+
+### Cancel sale by id set sale status to canceled
+
+DELETE {{host_Address}}/api/sale/{{saleid}}
+Authorization: Bearer {{token}}
+
+### update sale status canceled -> active-> payed-> delivered -> finished.
+
+PATCH {{host_Address}}/api/sale/{{saleid}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### set product from sale status to canceled and recalculate totalammount
+
+DELETE {{host_Address}}/api/sale/{{saleid}}/Product
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "products": [
+    "6f5a5196-af78-4446-940e-6c410238399d"
+  ]
+}
+
+### update quantity
+
+PATCH {{host_Address}}/api/sale/{{saleid}}/Product
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "products": [
+    {
+      "productId": "c28ab6d3-2cd3-45b3-98a7-2222c9cd7edb",
+      "quantity": 1
+    },
+    {
+      "productId": "e3c9c4bd-b12c-45b0-a106-7390a8249a7a",
+      "quantity": 1
+    },
+        {
+      "productId": "3c90b095-183d-40bb-a18c-16979cbda5b3",
+      "quantity": 10
+    },
+    {
+      "productId": "f5b1b3b4-3b3b-4b3b-8b3b-3b3b3b3b3b3b",
+      "quantity": 10
+    }
+    
+  ]
+}
 
 ###

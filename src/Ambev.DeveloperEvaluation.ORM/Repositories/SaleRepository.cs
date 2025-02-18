@@ -32,7 +32,6 @@ public class SaleRepository : ISaleRepository
         if (sale is null || sale.Status > SaleStatus.Active || sale.Status == SaleStatus.Canceled) return false;
 
         sale.Status = SaleStatus.Canceled;
-        sale.ProductSales.ToList().ForEach(ps => ps.Status = SaleStatus.Canceled);
 
         await UpdateAsync(sale, cancellationToken);
         return true;
